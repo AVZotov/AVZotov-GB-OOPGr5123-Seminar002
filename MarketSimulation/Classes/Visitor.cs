@@ -11,9 +11,9 @@ namespace MarketSimulation.Classes
             this.name = name;
         }
 
-        protected abstract Visitor GetVisitor();
+        public abstract Visitor GetVisitor();
 
-        protected abstract string GetName();
+        public abstract string GetName();
 
         public abstract string EnterMarketMessage();
 
