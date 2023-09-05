@@ -8,8 +8,8 @@ namespace MarketSimulation.Interfaces
 {
     internal interface IVisitorBehaviour
     {
-        string EnterMarketMessage();
+        public string EnterMarketMessage();
 
-        string LeaveMarketMessage();
+        public string LeaveMarketMessage();
     }
 }
