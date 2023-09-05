@@ -29,10 +29,11 @@ namespace MarketSimulation.Classes
         {
             for (int i = 0; i < visitors.Count; i++)
             {
-                if (visitors[i].GetType().IsAssignableTo(typeof(Customer)))
+                if (visitors[i] is Customer customer)
                 {
-                    ((Customer)visitors[i]).IsMakeChoice = true;
+                    customer.IsMakeChoice = true;
                 }
+
                 else
                 {
                     ((TaxInspector)visitors[i]).MakeInspection();
