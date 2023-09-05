@@ -1,6 +1,6 @@
 ﻿namespace MarketSimulation.Classes
 {
-    internal class Product
+    public class Product
     {
         private readonly Guid _id;
 

@@ -2,7 +2,7 @@
 
 namespace MarketSimulation.Interfaces
 {
-    internal interface IReturnProducts
+    public interface IReturnProducts
     {
         void ReturnRandomProduct();
 

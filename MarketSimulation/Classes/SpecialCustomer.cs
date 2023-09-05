@@ -1,6 +1,6 @@
 ﻿namespace MarketSimulation.Classes
 {
-    internal class SpecialCustomer : Customer
+    public class SpecialCustomer : Customer
     {
         private readonly string _id;
 
@@ -9,7 +9,7 @@
             this._id = id;
         }
 
-        protected override string GetName()
+        public override string GetName()
         {
             return base.GetName() + "id:" + _id;
         }

@@ -2,53 +2,35 @@
 
 namespace MarketSimulation.Classes
 {
-    internal class Customer : Visitor, IByProducts, IReturnProducts
+    public class Customer : Visitor, IByProducts, IReturnProducts
     {
         protected List<Product> productBasket;
 
-        protected bool isMakeChoice;
-        
-        protected bool isGetOrder;
+        private bool isMakeChoice;
+
+        private bool isGetOrder;
+
+        internal bool IsMakeChoice { get => isMakeChoice; set => isMakeChoice = value; }
+        internal bool IsGetOrder { get => isGetOrder; set => isGetOrder = value; }
 
         public Customer(string name) : base(name)
         {
             productBasket = new List<Product>();
         }
 
-        public override string LeaveMarketMessage()
-        {
-            return $"{name} left the market";
-        }
+        public override string LeaveMarketMessage() => $"{name} left the market";
 
-        public override string EnterMarketMessage()
-        {
-            return $"{name} entered the market";
-        }
+        public override string EnterMarketMessage() => $"{name} entered the market";
 
-        public override string GetName()
-        {
-            return this.name;
-        }
+        public override string GetName() => this.name;
 
-        public override Visitor GetVisitor()
-        {
-            return this;
-        }
+        public override Visitor GetVisitor() => this;
 
-        public int GetBasketCount()
-        {
-            return productBasket.Count;
-        }
+        public int GetBasketCount() => productBasket.Count;
 
-        public List<Product> GetProducts()
-        {
-            return productBasket;
-        }
+        public List<Product> GetProducts() => productBasket;
 
-        public void ReturnRandomProduct()
-        {
-            throw new NotImplementedException();
-        }
+        public void ReturnRandomProduct() => productBasket.Remove(productBasket[0]);
 
         public void ReturnRandomProducts(int amount)
         {
@@ -59,9 +41,6 @@ namespace MarketSimulation.Classes
             }
         }
 
-        public void AddProduct(Product product)
-        {
-            productBasket.Add(product);
-        }
+        public void AddProduct(Product product) => productBasket.Add(product);
     }
 }

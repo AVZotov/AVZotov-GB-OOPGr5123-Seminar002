@@ -2,7 +2,7 @@
 
 namespace MarketSimulation.Interfaces
 {
-    internal interface IByProducts
+    public interface IByProducts
     {
         void AddProduct(Product product);
     }

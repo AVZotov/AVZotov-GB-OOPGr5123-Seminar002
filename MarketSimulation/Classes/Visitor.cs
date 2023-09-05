@@ -2,7 +2,7 @@
 
 namespace MarketSimulation.Classes
 {
-    internal abstract class Visitor : IVisitorBehaviour
+    public abstract class Visitor : IVisitorBehaviour
     {
         protected string name;
 

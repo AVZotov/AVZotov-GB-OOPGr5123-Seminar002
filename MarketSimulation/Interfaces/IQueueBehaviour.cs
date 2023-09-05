@@ -7,9 +7,9 @@ namespace MarketSimulation.Interfaces
 {
     public interface IQueueBehaviour
     {
-        public void AddToQueue(IVisitorBehaviour visitor);
+        abstract string AddToQueue(IVisitorBehaviour visitor);
 
-        void RemoveFromQueue(IVisitorBehaviour visitor);
+        public string RemoveFromQueue(IVisitorBehaviour visitor);
 
     }
 }
