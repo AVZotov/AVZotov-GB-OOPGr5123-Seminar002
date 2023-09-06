@@ -1,5 +1,8 @@
 ﻿namespace MarketSimulation.Services
 {
+    /// <summary>
+    /// Simple file writer
+    /// </summary>
     public class Logger
     {
         private readonly string _filePath;
@@ -13,6 +16,19 @@
             this._filePath = this._currentDirectory + "/" + this._fileName;
         }
 
+        /// <summary>
+        /// Method to save string based message to file
+        /// <para>
+        /// If file exists: 
+        /// Each message appends to current file
+        /// </para>
+        /// <para>
+        /// If file does not exists: 
+        /// New file will be created
+        /// </para>
+        /// 
+        /// </summary>
+        /// <param name="message">string based message to be saved to file</param>
         public void Log(string message)
         {
             using (StreamWriter streamWriter = File.AppendText(this._filePath))

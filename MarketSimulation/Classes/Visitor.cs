@@ -2,7 +2,14 @@
 
 namespace MarketSimulation.Classes
 {
-    public abstract class Visitor : IVisitorBehaviour
+    /// <summary>
+    /// This abstract base class is a parent class for all 
+    /// entities visiting market
+    /// <para>
+    /// Impements <c>IVisitorBehaviour</c> interface
+    /// </para>
+    /// </summary>
+    public abstract class Visitor : IVisitorBehaviour 
     {
         protected string name;
 
@@ -13,6 +20,10 @@ namespace MarketSimulation.Classes
 
         public abstract Visitor GetVisitor();
 
+        /// <summary>
+        /// Method to get Visitor's name
+        /// </summary>
+        /// <returns>string</returns>
         public abstract string GetName();
 
         public abstract string EnterMarketMessage();
