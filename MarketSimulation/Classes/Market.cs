@@ -1,4 +1,3 @@
-using System.Reflection;
 using MarketSimulation.Interfaces;
 using MarketSimulation.Services;
 
@@ -6,7 +5,7 @@ namespace MarketSimulation.Classes
 {
     public class Market : IQueueBehaviour
     {
-        private List<IVisitorBehaviour> visitors;
+        private readonly List<IVisitorBehaviour> visitors;
         private readonly Logger logger;
         private readonly int discountCells;
 
@@ -23,6 +22,25 @@ namespace MarketSimulation.Classes
             GenerateVisitors();
             MakeOrder();
             TakeOrder();
+            UpdateMarket();
+        }
+
+        private void UpdateMarket()
+        {
+            for (int i = 0; i < visitors.Count;)
+            {
+                Customer customer = (Customer)visitors[i];
+                if (customer.IsGetOrder)
+                {
+                    string message;
+                    message = RemoveFromQueue(customer);
+                    Console.WriteLine(message);
+                    logger.Log(message);
+                    message = customer.LeaveMarketMessage();
+                    Console.WriteLine(message);
+                    logger.Log(message);
+                }
+            }
         }
 
         private void TakeOrder()
@@ -31,87 +49,106 @@ namespace MarketSimulation.Classes
             {
                 Customer customer = (Customer)visitors[i];
 
-                if (IsActionClient(customer))
-                    logger.Log(IsAllowedForDiscount((DiscountClient)customer));
-                
-                logger.Log(RemoveFromQueue(visitors[i]));
-                logger.Log(customer.LeaveMarketMessage());
-            }
+                if (customer.IsMakeChoice)
+                {
+                    string message;
+                    if (IsActionClient(customer))
+                    {
+                        message = IsAllowedForDiscount((DiscountClient)customer);
+                        Console.WriteLine(message);
+                        logger.Log(message);
+                    }
 
+                    customer.IsGetOrder = true;
+                    message = $"{customer.GetName()} recived his products";
+                    Console.WriteLine(message);
+                    logger.Log(message);
+                }
+            }
         }
 
         private void MakeOrder()
         {
+            string message;
+            IVisitorBehaviour? inspector = null;
             for (int i = 0; i < visitors.Count; i++)
             {
                 if (visitors[i] is Customer customer)
                 {
+                    customer.IsMakeChoice = true;
+                    message = $"{customer.GetName()} selected products to purchase";
+                    Console.WriteLine(message);
+                    logger.Log(message);
+
                     if (Utilities.GetChance(0.25))
                     {
                         string returnMessage = customer.GetName() + " " + customer.ReturnProduct();
-                        System.Console.WriteLine(returnMessage);
+                        Console.WriteLine(returnMessage);
                         logger.Log(returnMessage);
                     }
-                    
-                    customer.IsMakeChoice = true;
-                    string message = $"{customer.GetName()} select products to purchase";
-                    System.Console.WriteLine(message);
-                    logger.Log(message);
                 }
 
                 else
                 {
-                    TaxInspector inspector = (TaxInspector)visitors[i];
-                    inspector.MakeInspection();
-                    logger.Log(RemoveFromQueue(visitors[i]));
-                    logger.Log(inspector.LeaveMarketMessage());
+                    inspector = (TaxInspector)visitors[i];
+                    message = ((TaxInspector)visitors[i]).MakeInspection();
+                    Console.WriteLine(message);
+                    logger.Log(message);
                 }
+            }
+
+            message = RemoveFromQueue(inspector);
+            Console.WriteLine(message);
+            logger.Log(message);
+            if(inspector != null)
+            {
+                message = inspector.LeaveMarketMessage();
+                Console.WriteLine(message);
+                logger.Log(message);
             }
         }
 
-        private bool IsActionClient(Customer customer) => customer.GetType().IsAssignableTo(typeof(DiscountClient));
+        private static bool IsActionClient(Customer customer) => 
+            customer.GetType().IsAssignableTo(typeof(DiscountClient));
 
         private string IsAllowedForDiscount(DiscountClient client)
         {
-            string message;
-            if (client.DiscountNumber <= discountCells)
-            {
-                message = $"{client.GetName()} got discount";
-                System.Console.WriteLine(message);
-                return message;
-            }
-
-                message = $"{client.GetName()} did not got discount";
-                System.Console.WriteLine(message);
-                return message;
+            return (client.DiscountNumber <= discountCells)? 
+                $"{client.GetName()} got discount" : 
+                $"{client.GetName()} did not get discount";
         }
 
         private void GenerateVisitors()
         {
-            IVisitorBehaviour client1 = new Customer("Alex");
-            logger.Log(client1.EnterMarketMessage());
-            logger.Log(AddToQueue(client1));
             
+            IVisitorBehaviour client1 = new Customer("Alex");
+            HandleNewClient(client1);
+
             IVisitorBehaviour client2 = new Customer("Serg");
-            logger.Log(client2.EnterMarketMessage());
-            logger.Log(AddToQueue(client2));
+            HandleNewClient(client2);
 
             IVisitorBehaviour client3 = new SpecialCustomer("Ivan", "23");
-            logger.Log(client3.EnterMarketMessage());
-            logger.Log(AddToQueue(client3));
+            HandleNewClient(client3);
 
             IVisitorBehaviour client4 = new TaxInspector("Tax Officer");
-            logger.Log(client4.EnterMarketMessage());
-            logger.Log(AddToQueue(client4));
+            HandleNewClient(client4);
 
             IVisitorBehaviour client5 = new DiscountClient("Olga", "10% discount");
-            logger.Log(client5.EnterMarketMessage());
-            logger.Log(AddToQueue(client5));
+            HandleNewClient(client5);
 
             IVisitorBehaviour client6 = new DiscountClient("Nina", "10% discount");
-            logger.Log(client6.EnterMarketMessage());
-            logger.Log(AddToQueue(client6));
+            HandleNewClient(client6);
+        }
 
+        private void HandleNewClient(IVisitorBehaviour client)
+        {
+            string message;
+            message = client.EnterMarketMessage();
+            Console.WriteLine(message);
+            logger.Log(message);
+            message = AddToQueue(client);
+            Console.WriteLine(message);
+            logger.Log(message);
         }
 
         public string AddToQueue(IVisitorBehaviour visitor)
@@ -120,10 +157,14 @@ namespace MarketSimulation.Classes
             return $"{visitor.GetVisitor().GetName()} added to queue";
         }
 
-        public string RemoveFromQueue(IVisitorBehaviour visitor)
+        public string RemoveFromQueue(IVisitorBehaviour? visitor)
         {
-            visitors.Remove(visitor);
-            return $"{visitor.GetVisitor().GetName()} removed from queue";
+            if (visitor != null)
+            {
+                visitors.Remove(visitor);
+                return $"{visitor.GetVisitor().GetName()} removed from queue"; 
+            }
+            return String.Empty;
         }
     }
 }

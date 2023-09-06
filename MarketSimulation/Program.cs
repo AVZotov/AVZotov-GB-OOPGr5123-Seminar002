@@ -1,5 +1,5 @@
-﻿
-using MarketSimulation.Classes;
+﻿using MarketSimulation.Classes;
 
-Market market = new Market(1);
+int maxAmountOfActionClients = 1;
+Market market = new(maxAmountOfActionClients);
 market.Start();

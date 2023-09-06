@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketSimulation.Classes;
+﻿using MarketSimulation.Classes;
 
 namespace MarketSimulation.Interfaces
 {
