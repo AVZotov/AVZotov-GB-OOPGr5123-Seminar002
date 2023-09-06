@@ -5,6 +5,12 @@ using System.Threading.Tasks;
 
 namespace MarketSimulation.Classes
 {
+    /// <summary>
+    /// Describe the entity inspector whom inspect products in market
+    /// <para>
+    /// Extends <c>Visitor</c>
+    /// </para>
+    /// </summary>
     public class TaxInspector : Visitor
     {
         public TaxInspector(string name) : base(name)
@@ -15,16 +21,11 @@ namespace MarketSimulation.Classes
 
         public override string EnterMarketMessage() => $"{name} entered the market";
 
-        public string MakeInspection()
-        {
-            GetRandomProductsForCheck();
-            ReturnProducts();
-            return "Inspection passed succesfully!";
-        }
-
-        private void GetRandomProductsForCheck() => System.Console.WriteLine($"Tax inspector selected products for check");
-
-        private void ReturnProducts() => System.Console.WriteLine("Tax inspector returned checked products");
+        /// <summary>
+        /// Method simulate inpection
+        /// </summary>
+        /// <returns>string based notification</returns>
+        public string MakeInspection() => "Inspection passed succesfully!";
 
         public override Visitor GetVisitor() => this;
 

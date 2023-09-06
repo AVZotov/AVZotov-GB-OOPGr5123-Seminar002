@@ -2,6 +2,12 @@
 
 namespace MarketSimulation.Classes
 {
+    /// <summary>
+    /// This class decribe base functionality of customers. 
+    /// Is a base class of all special customers
+    /// <para>Extends: <c>Visitor</c> class</para>
+    /// <para>Implements: <c>IReturnProducts</c> interface</para>
+    /// </summary>
     public class Customer : Visitor, IReturnProducts
     {
         private bool isMakeChoice;

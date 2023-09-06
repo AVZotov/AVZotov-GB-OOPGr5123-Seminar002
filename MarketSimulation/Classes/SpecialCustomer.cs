@@ -1,5 +1,9 @@
 ﻿namespace MarketSimulation.Classes
 {
+    /// <summary>
+    /// This class decribe functionality of special customers
+    /// <para>Extends: <c>Customer</c> class</para>
+    /// </summary>
     public class SpecialCustomer : Customer
     {
         private readonly string _id;
