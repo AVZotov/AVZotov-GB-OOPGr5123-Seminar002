@@ -4,8 +4,8 @@ namespace MarketSimulation.Interfaces
 {
     public interface IReturnProducts
     {
-        void ReturnRandomProduct();
+        string ReturnProduct();
 
-        void ReturnRandomProducts(int amount);
+        string ReturnProducts(int amount);
     }
 }

@@ -30,16 +30,9 @@ namespace MarketSimulation.Classes
 
         public List<Product> GetProducts() => productBasket;
 
-        public void ReturnRandomProduct() => productBasket.Remove(productBasket[0]);
+        public string ReturnProduct() => $"Product returned";
 
-        public void ReturnRandomProducts(int amount)
-        {
-            for (int i = 0; i < amount; i++)
-            {
-                Product product = productBasket[i];
-                productBasket.Remove(product);
-            }
-        }
+        public string ReturnProducts(int amount) => $"{amount} products returned to the shop";
 
         public void AddProduct(Product product) => productBasket.Add(product);
     }

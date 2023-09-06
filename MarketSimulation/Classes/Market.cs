@@ -22,6 +22,21 @@ namespace MarketSimulation.Classes
         {
             GenerateVisitors();
             MakeOrder();
+            TakeOrder();
+        }
+
+        private void TakeOrder()
+        {
+            for (int i = 0; i < visitors.Count; i++)
+            {
+                Customer customer = (Customer)visitors[i];
+
+                if (IsActionClient(customer))
+                    logger.Log(IsAllowedForDiscount((DiscountClient)customer));
+                
+                logger.Log(RemoveFromQueue(visitors[i]));
+                logger.Log(customer.LeaveMarketMessage());
+            }
 
         }
 
@@ -31,14 +46,44 @@ namespace MarketSimulation.Classes
             {
                 if (visitors[i] is Customer customer)
                 {
+                    if (Utilities.GetChance(0.25))
+                    {
+                        string returnMessage = customer.GetName() + " " + customer.ReturnProduct();
+                        System.Console.WriteLine(returnMessage);
+                        logger.Log(returnMessage);
+                    }
+                    
                     customer.IsMakeChoice = true;
+                    string message = $"{customer.GetName()} select products to purchase";
+                    System.Console.WriteLine(message);
+                    logger.Log(message);
                 }
 
                 else
                 {
-                    ((TaxInspector)visitors[i]).MakeInspection();
+                    TaxInspector inspector = (TaxInspector)visitors[i];
+                    inspector.MakeInspection();
+                    logger.Log(RemoveFromQueue(visitors[i]));
+                    logger.Log(inspector.LeaveMarketMessage());
                 }
             }
+        }
+
+        private bool IsActionClient(Customer customer) => customer.GetType().IsAssignableTo(typeof(DiscountClient));
+
+        private string IsAllowedForDiscount(DiscountClient client)
+        {
+            string message;
+            if (client.DiscountNumber <= discountCells)
+            {
+                message = $"{client.GetName()} got discount";
+                System.Console.WriteLine(message);
+                return message;
+            }
+
+                message = $"{client.GetName()} did not got discount";
+                System.Console.WriteLine(message);
+                return message;
         }
 
         private void GenerateVisitors()
@@ -59,11 +104,11 @@ namespace MarketSimulation.Classes
             logger.Log(client4.EnterMarketMessage());
             logger.Log(AddToQueue(client4));
 
-            IVisitorBehaviour client5 = new DiscountClient("Olga");
+            IVisitorBehaviour client5 = new DiscountClient("Olga", "10% discount");
             logger.Log(client5.EnterMarketMessage());
             logger.Log(AddToQueue(client5));
 
-            IVisitorBehaviour client6 = new DiscountClient("Nina");
+            IVisitorBehaviour client6 = new DiscountClient("Nina", "10% discount");
             logger.Log(client6.EnterMarketMessage());
             logger.Log(AddToQueue(client6));
 

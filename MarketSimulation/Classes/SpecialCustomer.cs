@@ -11,7 +11,7 @@
 
         public override string GetName()
         {
-            return base.GetName() + "id:" + _id;
+            return "[" + base.GetName() + " id:" + _id + "]";
         }
     }
 }
